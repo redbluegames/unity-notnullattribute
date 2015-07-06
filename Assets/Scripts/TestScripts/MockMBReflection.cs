@@ -3,9 +3,9 @@ using System.Collections;
 
 namespace RedBlueTools
 {
-	public class TestMonobehaviour : MonoBehaviour
+	public class MockMBReflection : MonoBehaviour
 	{
-	#region int field test
+		#region int field test
 		int noAttriuteIntPrivate;
 		public int noAttributeIntegar;
 		[SerializeField]
@@ -14,13 +14,13 @@ namespace RedBlueTools
 		[SerializeField]
 		public int
 			IntPublic;
-	
-		// TODO: Multiple field test
-		//[SerializeField]
-		//public int IntMultipleFieldsPublic;
-	#endregion
+		
+		[SerializeField]
+		[NotNullAttribute]
+		public int IntMultipleFieldsPublic;
+		#endregion
 
-	#region Custom Class field test
+		#region Custom Class field test
 		CustomClass noAttributeCustomClassPrivate;
 		public CustomClass noAttributeCustomClassPublic;
 		[SerializeField]
@@ -29,7 +29,7 @@ namespace RedBlueTools
 		[SerializeField]
 		public CustomClass
 			CustomClassPublic;
-	#endregion
+		#endregion
 
 		public void PublicMethodNoAttribute ()
 		{

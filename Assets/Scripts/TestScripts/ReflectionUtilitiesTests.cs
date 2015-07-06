@@ -6,12 +6,13 @@ using System.Collections.Generic;
 
 namespace RedBlueTools
 {
-	public class TestReflectionUtilities : MonoBehaviour
+	[ExecuteInEditMode]
+	public class ReflectionUtilitiesTests : MonoBehaviour
 	{
-
 		public MonoBehaviour testBehaviour;
-
-		void Start ()
+		
+		[ContextMenu("Run Tests")]
+		void RunTests ()
 		{
 			List<FieldInfo> fieldsWithAttribute = ReflectionUtilities.GetMonoBehaviourFieldsWithAttribute<SerializeField> (testBehaviour);
 			LogFieldInfoList (fieldsWithAttribute);
