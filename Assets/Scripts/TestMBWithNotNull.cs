@@ -7,6 +7,8 @@ public class TestMBWithNotNull : MonoBehaviour {
 	[NotNullAttribute]
 	public int IntegerField;
 	public GameObject ObjectReferenceNoAttribute;
-	[NotNullAttribute]
+	[NotNull]
 	public GameObject RequiredObject;
+	[NotNullAttribute]
+	public GameObject RequiredObjectInScene;
 }

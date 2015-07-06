@@ -9,7 +9,6 @@ public class TestReflectionUtilities : MonoBehaviour {
 	public MonoBehaviour testBehaviour;
 
 	void Start () {
-
 		List<FieldInfo> fieldsWithAttribute = ReflectionUtilities.GetMonoBehaviourFieldsWithAttribute<SerializeField> (testBehaviour);
 		LogFieldInfoList (fieldsWithAttribute);
 	}
