@@ -4,7 +4,7 @@ using System.Reflection;
 using System.Collections;
 using System.Collections.Generic;
 
-public class TestMonobehaviourExtensions : MonoBehaviour {
+public class TestReflectionUtilities : MonoBehaviour {
 
 	public MonoBehaviour testBehaviour;
 
