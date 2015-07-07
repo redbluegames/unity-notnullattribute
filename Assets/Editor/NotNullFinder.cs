@@ -11,9 +11,9 @@ namespace RedBlueTools
 		static bool outputLogs = false;
 		
 		[MenuItem ("RedBlueTools/Not Null Finder")]
-		public static void  SearchForAndErrorForNullRequireWires ()
+		public static void  SearchForAndErrorForNotNullViolations ()
 		{
-			Debug.Log ("Searching for Null RequireWires");
+			Debug.Log ("Searching for null NotNull fields");
 			// Search for and error for prefabs with null RequireWire fields
 			string[] guidsForAllGameObjects = AssetDatabase.FindAssets ("t:GameObject");
 			foreach (string guid in guidsForAllGameObjects) {
@@ -36,7 +36,7 @@ namespace RedBlueTools
 			foreach (GameObject rootGameObjectInScene in rootSceneGameObjects) {
 				ErrorForNullRequiredWiresOnGameObject (rootGameObjectInScene, "In current scene.");
 			}
-			Debug.Log ("RequireWire search complete");
+			Debug.Log ("NotNull search complete");
 		}
 		
 		static void ErrorForNullRequiredWiresOnGameObject (GameObject gameObject, string pathToAsset)
@@ -59,7 +59,7 @@ namespace RedBlueTools
 					foreach (FieldInfo notNullField in notNullFields) {
 						object fieldObject = notNullField.GetValue (mb);
 						if (fieldObject == null || fieldObject.Equals (null)) {
-							Debug.LogError (string.Format ("RequiredWire field: {0} " +
+							Debug.LogError (string.Format ("NotNull field: {0} " +
 								"has not been assigned on object: {1}\nPath: {2}",
 						    notNullField.Name, mbPath, pathToAsset), mb.gameObject);
 						}
