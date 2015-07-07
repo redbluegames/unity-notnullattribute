@@ -55,11 +55,14 @@ namespace RedBlueTools
 						mbPath = currentParent.gameObject.name + "/" + mbPath;
 						currentParent = currentParent.transform.parent;
 					}
-					List<FieldInfo> nullFields = ReflectionUtilities.GetMonoBehaviourFieldsWithAttribute<NotNullAttribute> (mb);
-					foreach (FieldInfo nullField in nullFields) {
-						Debug.LogError (string.Format ("RequiredWire field: {0} " +
-							"has not been assigned on object: {1}\nPath: {2}",
-						    nullField.Name, mbPath, pathToAsset), gameObject);
+					List<FieldInfo> notNullFields = ReflectionUtilities.GetMonoBehaviourFieldsWithAttribute<NotNullAttribute> (mb);
+					foreach (FieldInfo notNullField in notNullFields) {
+						object fieldObject = notNullField.GetValue (mb);
+						if (fieldObject == null || fieldObject.Equals (null)) {
+							Debug.LogError (string.Format ("RequiredWire field: {0} " +
+								"has not been assigned on object: {1}\nPath: {2}",
+						    notNullField.Name, mbPath, pathToAsset), mb.gameObject);
+						}
 					}
 				}
 			}
@@ -70,7 +73,7 @@ namespace RedBlueTools
 			if (outputLogs == false) {
 				return;
 			}
-			Debug.Log ( log);
+			Debug.Log (log);
 		}
 	}
 }
