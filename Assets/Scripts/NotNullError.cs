@@ -136,6 +136,9 @@ namespace RedBlueTools
 		
 		public static bool MonoBehaviourHasErrors (MonoBehaviour mb)
 		{
+			if (mb == null) {
+				return true;
+			}
 			return GetErroringFields (mb).Count > 0;
 		}
 	}

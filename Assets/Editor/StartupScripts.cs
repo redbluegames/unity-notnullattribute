@@ -7,6 +7,7 @@ public class StartupScripts {
 	
 	static StartupScripts ()
 	{
+		// Comment out return to run on save.
 		return;
 		if(Debug.isDebugBuild) {
 			// Running immediately seemed to execute before references were wired up

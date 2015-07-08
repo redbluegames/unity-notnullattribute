@@ -13,6 +13,7 @@ public class NotNullErrorTester : MonoBehaviour {
 	public class GetNumErrorObjectsContainer
 	{
 		public GameObject Empty;
+		public GameObject MissingScript;
 		public GameObject NoNotNulls;
 		public GameObject Wired;
 		public GameObject OneError;
@@ -50,6 +51,7 @@ public class NotNullErrorTester : MonoBehaviour {
 	{
 		string testName = "GetNumErrorObjects";
 		TestAndAssertNumErrorObjects (testName, GetNumErrorObjects.Empty, 0);
+		TestAndAssertNumErrorObjects (testName, GetNumErrorObjects.MissingScript, 1);
 		TestAndAssertNumErrorObjects (testName, GetNumErrorObjects.NoNotNulls, 0);
 		TestAndAssertNumErrorObjects (testName, GetNumErrorObjects.Wired, 0);
 		TestAndAssertNumErrorObjects (testName, GetNumErrorObjects.OneError, 1);
