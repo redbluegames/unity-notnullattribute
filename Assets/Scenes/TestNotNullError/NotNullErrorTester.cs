@@ -6,118 +6,103 @@ using RedBlueTools;
 public class NotNullErrorTester : MonoBehaviour {
 
 	#region Successes
-	public GameObject NoNotNull_NoMonobehaviour;
-	public GameObject NoNotNull_OneMonobehaviour;
-	public GameObject NoNotNull_MultipleMonoBehaviours;
 
-	public GameObject Wired_OneMonobehaviour;
-	public GameObject Wired_ManyNotNulls;
-	public GameObject Wired_TwoMonobehaviours;
-	public GameObject Wired_InactiveObject;
+	public GetNumErrorObjectsContainer GetNumErrorObjects;
 
-	public GameObject Wired_ParentHasChild;
-	public GameObject Wired_ParentWithDeepChild;
-	public GameObject Wired_ParentAndChild;
-	public GameObject Wired_ParentWithInactiveChild;
+	[System.Serializable]
+	public class GetNumErrorObjectsContainer
+	{
+		public GameObject Empty;
+		public GameObject NoNotNulls;
+		public GameObject Wired;
+		public GameObject OneError;
+		public GameObject OneErrorTwoUnwiredMonoBehaviours;
+		public GameObject OneErrorTwoMonoBehaviours;
+		public GameObject OneErrorInChild;
+		public GameObject OneErrorInDeepChild;
+		public GameObject OneErrorInactiveChild;
+		public GameObject ParentAndChildWithErrors;
+		public GameObject TwoErrorsInSiblings;
+		public GameObject ErrorsInComplexHierarchy;
+	}
+
+	public GetNumErrorFieldsContainer GetNumErrorFields;
+	[System.Serializable]
+	public class GetNumErrorFieldsContainer
+	{
+		public GameObject NoneWired;
+		public GameObject SomeWired;
+		public GameObject AllWired;
+		public GameObject MultiUnwired;
+	}
+
 	#endregion
 
 	[ContextMenu("Run Tests")]
 	void RunTests ()
 	{
-		Test_NoNotNullAttributes_NoMonobehaviour ();
-		Test_NoNotNullAttributes_OneMonobehaviour ();
-		Test_NoNotNullAttributes_MultipleMonoBehaviours ();
-
-		Test_Wired_OneMonobehaviour ();
-		Test_Wired_ManyNotNulls ();
-		Test_Wired_TwoMonobehaviours ();
-		Test_Wired_InactiveGameObject ();
-
-		Test_Wired_ParentHasChild ();
-		Test_Wired_ParentAndChild ();
-		Test_Wired_ParentWithDeepChild ();
-		Test_Wired_ParentWithInactiveChild ();
-
-	//	List<FieldInfo> fieldsWithAttribute = ReflectionUtilities.GetMonoBehaviourFieldsWithAttribute<SerializeField> (testBehaviour);
-	//	LogFieldInfoList (fieldsWithAttribute);
+		Test_GetNumErrorObjects ();
+		Test_GetsCorrectNumErroringFields ();
 	}
 
 	#region Tests
-	void Test_NoNotNullAttributes_NoMonobehaviour ()
+	void Test_GetNumErrorObjects ()
 	{
-		GameObject testGameObject = NoNotNull_NoMonobehaviour;
-		AssertNoErrors (RunTestsOnObject (testGameObject), 
-		                "Test_NoNotNullAttributes_NoMonobehaviour");
+		string testName = "GetNumErrorObjects";
+		TestAndAssertNumErrorObjects (testName, GetNumErrorObjects.Empty, 0);
+		TestAndAssertNumErrorObjects (testName, GetNumErrorObjects.NoNotNulls, 0);
+		TestAndAssertNumErrorObjects (testName, GetNumErrorObjects.Wired, 0);
+		TestAndAssertNumErrorObjects (testName, GetNumErrorObjects.OneError, 1);
+		TestAndAssertNumErrorObjects (testName, GetNumErrorObjects.OneErrorTwoMonoBehaviours, 1);
+		TestAndAssertNumErrorObjects (testName, GetNumErrorObjects.OneErrorTwoUnwiredMonoBehaviours, 1);
+		TestAndAssertNumErrorObjects (testName, GetNumErrorObjects.OneErrorInactiveChild, 1);
+		TestAndAssertNumErrorObjects (testName, GetNumErrorObjects.OneErrorInChild, 1);
+		TestAndAssertNumErrorObjects (testName, GetNumErrorObjects.OneErrorInDeepChild, 1);
+		TestAndAssertNumErrorObjects (testName, GetNumErrorObjects.ParentAndChildWithErrors, 2);
+		TestAndAssertNumErrorObjects (testName, GetNumErrorObjects.TwoErrorsInSiblings, 2);
+		TestAndAssertNumErrorObjects (testName, GetNumErrorObjects.ErrorsInComplexHierarchy, 3);
+
+		Debug.Log ("Test passed: " + testName);
 	}
 
-	void Test_NoNotNullAttributes_OneMonobehaviour ()
+	void TestAndAssertNumErrorObjects (string testName, GameObject testObject, int expectedErrors)
 	{
-		GameObject testGameObject = NoNotNull_OneMonobehaviour;
-		AssertNoErrors (RunTestsOnObject (testGameObject), 
-		                "Test_NoNotNullAttributes_OneMonobehaviour");
-	}
+		string subTestName = testName + " | " + testObject.name;
+		List<NotNullError> errors = new List<NotNullError> ();
+		NotNullError.TraverseGameObjectHierarchyForErrors (testObject, "TestScene", ref errors);
 
-	void Test_NoNotNullAttributes_MultipleMonoBehaviours ()
-	{
-		GameObject testGameObject = NoNotNull_MultipleMonoBehaviours;
-		AssertNoErrors (RunTestsOnObject (testGameObject), 
-		                "Test_NoNotNullAttributes_MultipleMonoBehaviours");
+		if (errors.Count != expectedErrors) {
+			LogTestFailure (subTestName, string.Format("Expected {0} errors, found {1}", 
+			                                           expectedErrors,
+			                                           errors.Count));
+			return;
+		}
 	}
 	
-	void Test_Wired_OneMonobehaviour ()
+	void Test_GetsCorrectNumErroringFields ()
 	{
-		GameObject testGameObject = Wired_OneMonobehaviour;
-		AssertNoErrors (RunTestsOnObject (testGameObject), 
-		                "Test_Wired_OneMonobehaviour");
+		string testName = "GetsCorrectNumErrors";
+
+		TestAndAssertNumErroringFields (testName, GetNumErrorFields.NoneWired, 3);
+		TestAndAssertNumErroringFields (testName, GetNumErrorFields.SomeWired, 2);
+		TestAndAssertNumErroringFields (testName, GetNumErrorFields.AllWired, 0);
+		TestAndAssertNumErroringFields (testName, GetNumErrorFields.MultiUnwired, 4);
+
+		Debug.Log ("Test passed: " + testName);
 	}
 
-	void Test_Wired_ManyNotNulls ()
+	void TestAndAssertNumErroringFields (string testName, GameObject testObject, int expectedErrors)
 	{
-		GameObject testGameObject = Wired_ManyNotNulls;
-		AssertNoErrors (RunTestsOnObject (testGameObject), 
-		                "Test_Wired_ManyNotNulls");
-	}
+		string subTestName = testName + " | " + testObject.name;
+		List<NotNullError> errors = new List<NotNullError> ();
+		NotNullError.TraverseGameObjectHierarchyForErrors (testObject, "TestScene", ref errors);
 
-	void Test_Wired_TwoMonobehaviours ()
-	{
-		GameObject testGameObject = Wired_TwoMonobehaviours;
-		AssertNoErrors (RunTestsOnObject (testGameObject), 
-		                "Test_Wired_TwoMonobehaviours");
-	}
-
-	void Test_Wired_InactiveGameObject ()
-	{
-		GameObject testGameObject = Wired_InactiveObject;
-		AssertNoErrors (RunTestsOnObject (testGameObject), 
-		                "Test_Wired_InactiveGameObject");
-	}
-
-	void Test_Wired_ParentHasChild ()
-	{
-		GameObject testGameObject = Wired_ParentHasChild;
-		AssertNoErrors (RunTestsOnObject (testGameObject), 
-		                "Test_Wired_ParentHasChild");
-	}
-	
-	void Test_Wired_ParentAndChild ()
-	{
-		GameObject testGameObject = Wired_ParentAndChild;
-		AssertNoErrors (RunTestsOnObject (testGameObject), 
-		                "Test_Wired_ParentAndChild");
-	}
-
-	void Test_Wired_ParentWithDeepChild ()
-	{
-		GameObject testGameObject = Wired_ParentWithDeepChild;
-		AssertNoErrors (RunTestsOnObject (testGameObject), 
-		                "Test_Wired_ParentWithDeepChild");
-	}
-	
-	void Test_Wired_ParentWithInactiveChild ()
-	{
-		GameObject testGameObject = Wired_ParentWithInactiveChild;
-		AssertNoErrors (RunTestsOnObject (testGameObject), 
-		                "Test_Wired_ParentWithInactiveChild");
+		int numFieldsWithErrors = errors.Count == 0 ? 0 : errors [0].NumFieldsWithErrors;
+		if (numFieldsWithErrors != expectedErrors) {
+			LogTestFailure (subTestName, string.Format ("Expected {0} fields with errors, found {1}",
+			                                            expectedErrors, numFieldsWithErrors));
+			return;
+		}
 	}
 	#endregion
 
@@ -130,13 +115,9 @@ public class NotNullErrorTester : MonoBehaviour {
 		return errors;
 	}
 
-	void AssertNoErrors (List<NotNullError> errorResults, string testName)
+	void LogTestFailure (string testName, string failureMessage)
 	{
-		if (errorResults.Count > 0) {
-			Debug.LogError ("Test failed: " + testName);
-		} else {
-			Debug.Log ("Test passed:" + testName);
-		}
+		Debug.LogError ("Test Failed: " + testName + "\n" + failureMessage);
 	}
 	#endregion
 }

@@ -31,6 +31,16 @@ namespace RedBlueTools
 				}
 			}
 		}
+
+		public int NumFieldsWithErrors {
+			get {
+				int sumOfErrors = 0;
+				foreach (ErrorMonoBehaviour erroringMB in MonoBehavioursWithErrors) {
+					sumOfErrors += erroringMB.NumErrorFields;
+				}
+				return sumOfErrors;
+			}
+		}
 	
 		public NotNullError (GameObject sourceObject, string assetPath)
 		{
