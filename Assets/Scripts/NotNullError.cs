@@ -57,6 +57,16 @@ namespace RedBlueTools
 		
 			return false;
 		}
+		
+		public static void TraverseGameObjectHierarchyForErrors (GameObject obj, string assetPath, ref List<NotNullError> errorsInHierarchy)
+		{ 
+			if (NotNullError.ObjectHasErrors (obj)) {
+				errorsInHierarchy.Add (new NotNullError (obj, assetPath));
+			}
+			foreach (Transform child in obj.transform) {
+				TraverseGameObjectHierarchyForErrors (child.gameObject, assetPath, ref errorsInHierarchy);
+			}
+		}
 	
 		public void OutputError ()
 		{

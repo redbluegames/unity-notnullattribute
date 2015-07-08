@@ -7,6 +7,7 @@ public class StartupScripts {
 	
 	static StartupScripts ()
 	{
+		return;
 		if(Debug.isDebugBuild) {
 			// Running immediately seemed to execute before references were wired up
 			EditorApplication.update += RunOnce;

@@ -44,21 +44,11 @@ namespace RedBlueTools
 		static void ErrorForNullRequiredWiresOnGameObject (GameObject gameObject, string pathToAsset)
 		{
 			List<NotNullError> erroringObjects = new List<NotNullError> ();
-			TraverseGameObjectHierarchyForErrors (gameObject, pathToAsset, ref erroringObjects);
+			NotNullError.TraverseGameObjectHierarchyForErrors (gameObject, pathToAsset, ref erroringObjects);
 			foreach (NotNullError errorObject in erroringObjects) {
 				errorObject.OutputError ();
 			}
 			return;
-		}
-
-		static void TraverseGameObjectHierarchyForErrors (GameObject obj, string assetPath, ref List<NotNullError> errorings)
-		{ 
-			if (NotNullError.ObjectHasErrors (obj)) {
-				errorings.Add (new NotNullError (obj, assetPath));
-			}
-			foreach (Transform child in obj.transform) {
-				TraverseGameObjectHierarchyForErrors (child.gameObject, assetPath, ref errorings);
-			}
 		}
 
 		static void Log (string log)
