@@ -21,8 +21,7 @@ namespace RedBlueTools
 			}
 			foreach (FieldInfo fieldInfo in allFields) {
 				foreach (Attribute attribute in Attribute.GetCustomAttributes (fieldInfo)) {
-					// Base type comparison added to help with NotNullInScene
-					if (attribute.GetType () == typeof(T) || attribute.GetType ().BaseType == typeof (T)) {
+					if (attribute.GetType () == typeof(T)) {
 						fieldsWithAttribute.Add (fieldInfo);
 						break;
 					}
