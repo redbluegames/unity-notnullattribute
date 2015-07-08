@@ -1,13 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MBWithManyNotNulls : MonoBehaviour
+public class ManyNotNulls : MonoBehaviour
 {
 	public GameObject ObjectReferenceNoAttribute;
 	[NotNull]
 	public GameObject
 		RequiredObjectA;
-	[NotNull]
+	[NotNullInScene]
 	public GameObject
 		RequiredObjectB;
 	GameObject privateReference;

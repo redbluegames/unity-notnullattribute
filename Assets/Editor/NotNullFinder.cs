@@ -14,6 +14,7 @@ namespace RedBlueTools
 		public static void  SearchForAndErrorForNotNullViolations ()
 		{
 			Debug.Log ("Searching for null NotNull fields");
+			List<NotNullError> errorsOnPrefabs = new List<NotNullError> ();
 			// Search for and error for prefabs with null RequireWire fields
 			string[] guidsForAllGameObjects = AssetDatabase.FindAssets ("t:GameObject");
 			foreach (string guid in guidsForAllGameObjects) {
@@ -21,10 +22,11 @@ namespace RedBlueTools
 				string pathToGameObject = AssetDatabase.GUIDToAssetPath (guid);
 				Log ("Loading Asset for guid at path: " + pathToGameObject);
 				GameObject gameObject = (GameObject)AssetDatabase.LoadAssetAtPath (pathToGameObject, typeof(GameObject));
-				
-				ErrorForNullRequiredWiresOnGameObject (gameObject, pathToGameObject);
-			}
 
+				Log ("Traversing GameObject for errors: " + gameObject.name);
+				NotNullError.TraverseGameObjectHierarchyForErrors (gameObject, pathToGameObject, 
+				                                                   ref errorsOnPrefabs);
+			}
 
 			// Search the scene objects (only need root game objects since children will be searched)
 			GameObject[] sceneGameObjects = (GameObject[])GameObject.FindObjectsOfType (typeof(GameObject));

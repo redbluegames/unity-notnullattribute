@@ -55,18 +55,6 @@ namespace RedBlueTools
 				}
 			}
 		}
-	
-		public static bool ObjectHasErrors (GameObject gameObject)
-		{
-			MonoBehaviour[] monobehaviours = gameObject.GetComponents<MonoBehaviour> ();
-			for (int i = 0; i < monobehaviours.Length; i++) {
-				if (ErrorMonoBehaviour.MonoBehaviourHasErrors (monobehaviours [i])) {
-					return true;
-				}
-			}
-		
-			return false;
-		}
 		
 		public static void TraverseGameObjectHierarchyForErrors (GameObject obj, string assetPath, ref List<NotNullError> errorsInHierarchy)
 		{ 
@@ -76,6 +64,18 @@ namespace RedBlueTools
 			foreach (Transform child in obj.transform) {
 				TraverseGameObjectHierarchyForErrors (child.gameObject, assetPath, ref errorsInHierarchy);
 			}
+		}
+		
+		public static bool ObjectHasErrors (GameObject gameObject)
+		{
+			MonoBehaviour[] monobehaviours = gameObject.GetComponents<MonoBehaviour> ();
+			for (int i = 0; i < monobehaviours.Length; i++) {
+				if (ErrorMonoBehaviour.MonoBehaviourHasErrors (monobehaviours [i])) {
+					return true;
+				}
+			}
+			
+			return false;
 		}
 	
 		public void OutputError ()
@@ -112,25 +112,34 @@ namespace RedBlueTools
 			this.IsMissing = sourceMB == null;
 			
 			if (sourceMB != null) {
-				this.ErrorFields = new List<ErrorField> ();
-				List<FieldInfo> erroringFields = GetErroringFields (sourceMB);
-				foreach (FieldInfo erroringField in erroringFields) {
-					this.ErrorFields.Add (new ErrorField (erroringField, sourceMB));
-				}
+				this.ErrorFields = GetErroringFields (sourceMB);
 			}
 		}
 		
-		static List<FieldInfo> GetErroringFields (MonoBehaviour sourceMB)
+		static List<ErrorField> GetErroringFields (MonoBehaviour sourceMB)
 		{
-			List<FieldInfo> erroringFields = new List<FieldInfo> ();
+			List<ErrorField> erroringFields = new List<ErrorField> ();
+
+			// Add null NotNull fields
 			List<FieldInfo> notNullFields = ReflectionUtilities.GetMonoBehaviourFieldsWithAttribute<NotNullAttribute> (sourceMB);
 			foreach (FieldInfo notNullField in notNullFields) {
 				object fieldObject = notNullField.GetValue (sourceMB);
 				if (fieldObject == null || fieldObject.Equals (null)) {
-					erroringFields.Add (notNullField);
+					erroringFields.Add (new ErrorField (notNullField, sourceMB, false));
 				}
 			}
-			
+
+			// Add null NotNullInScene fields, if they aren't already in it.
+			List<FieldInfo> notNullInSceneFields = ReflectionUtilities.GetMonoBehaviourFieldsWithAttribute<NotNullInSceneAttribute> (sourceMB);
+			foreach (FieldInfo notNullInSceneField in notNullInSceneFields) {
+				object fieldObject = notNullInSceneField.GetValue (sourceMB);
+				if (fieldObject == null || fieldObject.Equals (null)) {
+					if (!notNullFields.Contains (notNullInSceneField)) {
+						erroringFields.Add (new ErrorField (notNullInSceneField, sourceMB, true));
+					}
+				}
+			}
+
 			return erroringFields;
 		}
 		
@@ -147,11 +156,13 @@ namespace RedBlueTools
 	{
 		public FieldInfo fieldInfo;
 		public MonoBehaviour sourceBehaviour;
+		public bool AllowNullAsPrefab;
 		
-		public ErrorField (FieldInfo fieldInfo, MonoBehaviour sourceMB)
+		public ErrorField (FieldInfo fieldInfo, MonoBehaviour sourceMB, bool allowNullAsPrefab = false)
 		{
 			this.fieldInfo = fieldInfo;
 			this.sourceBehaviour = sourceMB;
+			this.AllowNullAsPrefab = allowNullAsPrefab;
 		}
 	}
 }

@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace RedBlueTools
 {
-	public class MBWithNotNull : MonoBehaviour
+	public class SimpleNotNull : MonoBehaviour
 	{
 		public GameObject ObjectReferenceNoAttribute;
 		[NotNull]
