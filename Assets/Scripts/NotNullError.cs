@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using System.Reflection;
+using System;
 
 namespace RedBlueTools
 {
@@ -98,7 +99,7 @@ namespace RedBlueTools
 					}
 					Debug.LogError (string.Format ("NotNull field: {0} " +
 						"has not been assigned on object: {1}\nPath: {2}",
-				        error.fieldInfo.Name, FullName, AssetPath), this.ErrorGameObject);
+				        error.FieldInfo.Name, FullName, AssetPath), this.ErrorGameObject);
 				}
 			}
 		}
@@ -126,11 +127,11 @@ namespace RedBlueTools
 			this.IsMissing = sourceMB == null;
 			
 			if (sourceMB != null) {
-				this.ErrorFields = GetErroringFields (sourceMB);
+				this.ErrorFields = FindErroringFields (sourceMB);
 			}
 		}
 		
-		static List<ErrorField> GetErroringFields (MonoBehaviour sourceMB)
+		static List<ErrorField> FindErroringFields (MonoBehaviour sourceMB)
 		{
 			List<ErrorField> erroringFields = new List<ErrorField> ();
 
@@ -143,13 +144,13 @@ namespace RedBlueTools
 				}
 			}
 
-			// Add null NotNullInScene fields, if they aren't already in it.
-			List<FieldInfo> notNullInSceneFields = ReflectionUtilities.GetMonoBehaviourFieldsWithAttribute<NotNullInSceneAttribute> (sourceMB);
-			foreach (FieldInfo notNullInSceneField in notNullInSceneFields) {
-				object fieldObject = notNullInSceneField.GetValue (sourceMB);
-				if (fieldObject == null || fieldObject.Equals (null)) {
-					if (!notNullFields.Contains (notNullInSceneField)) {
-						erroringFields.Add (new ErrorField (notNullInSceneField, sourceMB, true));
+			// Flag notNullAttributes that are allowed to be null as prefabs
+			foreach (ErrorField errorField in erroringFields) {
+				FieldInfo fieldInfo = errorField.FieldInfo;
+				foreach (Attribute attribute in Attribute.GetCustomAttributes (fieldInfo)) {
+					if (attribute.GetType () == typeof(NotNullAttribute)) {
+						NotNullAttribute notNullAttribute = (NotNullAttribute) attribute;
+						errorField.AllowNullAsPrefab = notNullAttribute.IgnorePrefab;
 					}
 				}
 			}
@@ -162,20 +163,20 @@ namespace RedBlueTools
 			if (mb == null) {
 				return true;
 			}
-			return GetErroringFields (mb).Count > 0;
+			return FindErroringFields (mb).Count > 0;
 		}
 	}
 	
 	public class ErrorField
 	{
-		public FieldInfo fieldInfo;
-		public MonoBehaviour sourceBehaviour;
+		public FieldInfo FieldInfo;
+		public MonoBehaviour SourceMonoBehaviour;
 		public bool AllowNullAsPrefab;
 		
 		public ErrorField (FieldInfo fieldInfo, MonoBehaviour sourceMB, bool allowNullAsPrefab = false)
 		{
-			this.fieldInfo = fieldInfo;
-			this.sourceBehaviour = sourceMB;
+			this.FieldInfo = fieldInfo;
+			this.SourceMonoBehaviour = sourceMB;
 			this.AllowNullAsPrefab = allowNullAsPrefab;
 		}
 	}

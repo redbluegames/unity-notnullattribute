@@ -7,7 +7,7 @@ public class ManyNotNulls : MonoBehaviour
 	[NotNull]
 	public GameObject
 		RequiredObjectA;
-	[NotNullInScene]
+	[NotNull (IgnorePrefab = true)]
 	public GameObject
 		RequiredObjectB;
 	GameObject privateReference;
