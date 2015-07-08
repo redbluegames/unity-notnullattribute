@@ -14,7 +14,6 @@ namespace RedBlueTools
 		public static void  SearchForAndErrorForNotNullViolations ()
 		{
 			Debug.Log ("Searching for null NotNull fields");
-			List<NotNullError> errorsOnPrefabs = new List<NotNullError> ();
 			// Search for and error for prefabs with null RequireWire fields
 			string[] guidsForAllGameObjects = AssetDatabase.FindAssets ("t:GameObject");
 			foreach (string guid in guidsForAllGameObjects) {
@@ -23,9 +22,7 @@ namespace RedBlueTools
 				Log ("Loading Asset for guid at path: " + pathToGameObject);
 				GameObject gameObject = (GameObject)AssetDatabase.LoadAssetAtPath (pathToGameObject, typeof(GameObject));
 
-				Log ("Traversing GameObject for errors: " + gameObject.name);
-				NotNullError.TraverseGameObjectHierarchyForErrors (gameObject, pathToGameObject, 
-				                                                   ref errorsOnPrefabs);
+				ErrorForNullRequiredWiresOnGameObject (gameObject, pathToGameObject, true);
 			}
 
 			// Search the scene objects (only need root game objects since children will be searched)
@@ -37,18 +34,22 @@ namespace RedBlueTools
 				}
 			}
 			foreach (GameObject rootGameObjectInScene in rootSceneGameObjects) {
-				ErrorForNullRequiredWiresOnGameObject (rootGameObjectInScene, "In current scene.");
+				ErrorForNullRequiredWiresOnGameObject (rootGameObjectInScene, "In current scene.", false);
 			}
 
 			Debug.Log ("NotNull search complete");
 		}
 
-		static void ErrorForNullRequiredWiresOnGameObject (GameObject gameObject, string pathToAsset)
+		static void ErrorForNullRequiredWiresOnGameObject (GameObject gameObject, string pathToAsset, bool checkPrefabs)
 		{
 			List<NotNullError> erroringObjects = new List<NotNullError> ();
 			NotNullError.TraverseGameObjectHierarchyForErrors (gameObject, pathToAsset, ref erroringObjects);
 			foreach (NotNullError errorObject in erroringObjects) {
-				errorObject.OutputError ();
+				if (checkPrefabs) {
+					errorObject.OutputErrorForPrefabs ();
+				}else {
+					errorObject.OutputErrorForSceneObjects ();
+				}
 			}
 			return;
 		}

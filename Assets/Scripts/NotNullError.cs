@@ -77,11 +77,25 @@ namespace RedBlueTools
 			
 			return false;
 		}
+
+		public void OutputErrorForPrefabs ()
+		{
+			OutputError (true);
+		}
+
+		public void OutputErrorForSceneObjects ()
+		{
+			OutputError (false);
+		}
 	
-		public void OutputError ()
+		void OutputError (bool checkPrefabs)
 		{
 			foreach (ErrorMonoBehaviour errorMB in MonoBehavioursWithErrors) {
 				foreach (ErrorField error in errorMB.ErrorFields) {
+					bool overlookError = checkPrefabs && error.AllowNullAsPrefab;
+					if (overlookError) {
+						continue;
+					}
 					Debug.LogError (string.Format ("NotNull field: {0} " +
 						"has not been assigned on object: {1}\nPath: {2}",
 				        error.fieldInfo.Name, FullName, AssetPath), this.ErrorGameObject);
