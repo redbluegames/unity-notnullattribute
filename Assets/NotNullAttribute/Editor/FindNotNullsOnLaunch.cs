@@ -3,9 +3,9 @@ using UnityEditor;
 using System.Collections;
 
 [InitializeOnLoad]
-public class FindNotNullsOnStart {
+public class FindNotNullsOnLaunch {
 	
-	static FindNotNullsOnStart ()
+	static FindNotNullsOnLaunch ()
 	{
 		if(Debug.isDebugBuild) {
 			RedBlueTools.NotNullFinder.SearchForAndErrorForNotNullViolations ();
