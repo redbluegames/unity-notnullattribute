@@ -3,11 +3,6 @@ using UnityEditor;
 using System;
 using System.Reflection;
 
-/*
- * Based off the tutorial found here:
- * http://blogs.unity3d.com/2012/09/07/property-drawers-in-unity-4/
- * Gives an intro into a RegEx attribute, that warns if not a valid expression.
- */
 namespace RedBlueTools
 {
 	[CustomPropertyDrawer(typeof(NotNullAttribute))]
@@ -35,7 +30,23 @@ namespace RedBlueTools
 	
 		bool IsNotWiredUp (SerializedProperty property)
 		{
-			return property.objectReferenceValue == null;
+			if (IsPropertyNotNullInSceneAndPrefab (property)) {
+				return false;
+			} else {
+				return property.objectReferenceValue == null;
+			}
+		}
+
+		bool IsPropertyNotNullInSceneAndPrefab (SerializedProperty property)
+		{
+			NotNullAttribute myAttribute = (NotNullAttribute)base.attribute;
+			bool isPrefabAllowedNull = myAttribute.IgnorePrefab;
+			return IsPropertyOnPrefab (property) && isPrefabAllowedNull;
+		}
+		
+		bool IsPropertyOnPrefab (SerializedProperty property)
+		{
+			return EditorUtility.IsPersistent (property.serializedObject.targetObject);
 		}
 	
 		public override void OnGUI (Rect position, SerializedProperty property, GUIContent label)
@@ -65,18 +76,26 @@ namespace RedBlueTools
 				EditorGUI.PropertyField (drawArea, property, label);
 				return;
 			}
-			label.text = "* " + label.text;
-			EditorGUI.ObjectField (drawArea, property, label);
+
+			if (IsPropertyNotNullInSceneAndPrefab (property)) {
+				// Render Object Field for NotNull (InScene) attributes on Prefabs.
+				label.text = "(*) " + label.text;
+				EditorGUI.BeginDisabledGroup (true);
+				EditorGUI.ObjectField (drawArea, property, label);
+				EditorGUI.EndDisabledGroup ();
+			} else {
+				label.text = "* " + label.text;
+				EditorGUI.ObjectField (drawArea, property, label);
+			}
 		}
 	
 		void BuildWarningRectangle (Rect drawArea, SerializedProperty property)
 		{
 			if (property.propertyType != SerializedPropertyType.ObjectReference) {
-				string warningString = "NotNullAttribute only works with ObjectReference fields";
+				string warningString = "NotNullAttribute only valid on ObjectReference fields.";
 				EditorGUI.HelpBox (drawArea, warningString, MessageType.Warning);
 			} else if (IsNotWiredUp (property)) {
-			
-				string warningString = "Missing required object reference";
+				string warningString = "Missing object reference for NotNull property.";
 				EditorGUI.HelpBox (drawArea, warningString, MessageType.Error);
 			}
 		}

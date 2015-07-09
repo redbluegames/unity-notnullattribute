@@ -19,7 +19,7 @@ public class NotNullDrawerTester : MonoBehaviour
 	public GameObject
 		RequiredInScene;
 	public string PublicString;
-	[NotNull]
+	[NotNull (IgnorePrefab = true)]
 	public GameObject
 		RequiredObjectInScene;
 	[NotNullAttribute]
