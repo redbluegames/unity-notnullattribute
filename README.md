@@ -51,6 +51,16 @@ public class UI_MainMenu
 }
 ```
 
+##Installation
+The easiest thing to do is to install the package from the .unitypackage file that's included in the repository.
+* In the root folder, click the file called "NotNullAttributePackage.unitypackage".
+* Then click on View Raw to download the package.
+* In Unity, go to Assets / Import Package / Custom Package
+* Select the downloaded package
+* Install all components
+
+You can put the folder wherever you want, but the files under the Editor folder must remain in a folder called "Editor" in order to be compiled correctly.
+
 ##FAQ
 
 * Why use this workflow instead of `GameObject.Find ("ObjectName")` or `FindComponentsInChildren<>`
