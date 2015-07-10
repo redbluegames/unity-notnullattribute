@@ -10,7 +10,7 @@ Our workflow for UI requires each root UI screen, such a Main Menu, to be its ow
 Here is an example of the script without a NotNull attribute:
 
 ```
-public class UI_MainMenu
+public class UI_MainMenu : MonoBehaviour
 {
   public Button ContinueButton;
   
@@ -38,7 +38,7 @@ Adding the NotNull gives us several advantages over the previous code:
 Here is what the MainMenu script looks like with NotNull:
 
 ```
-public class UI_MainMenu
+public class UI_MainMenu : MonoBehaviour
 {
   [NotNull]
   public Button ContinueButton;
