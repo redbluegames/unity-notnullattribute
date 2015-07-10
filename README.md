@@ -63,5 +63,5 @@ You can put the folder wherever you want, but the files under the Editor folder 
 
 ##FAQ
 
-* Why use this workflow instead of using `GameObject.Find ("ObjectName")` or `FindComponent<>` or some other way to link up objects.
+* Why use this workflow instead of using `GameObject.Find ("ObjectName")` or `FindComponent<>` or some other way to link up objects?
   * There are many reasons we prefer this workflow. First it's not brittle. If you link to the object through GameObject.Find (), changing the name of the object in the hierarchy or in the scene will silently break this reference. It is also good for memory management. Assets that are referenced by an object will be loaded when the object is loaded, so it's easy to see what is being brought into memory when it's linked directly on a prefab or object. Finally, and maybe most importantly, if somehow the reference does break, you will find out about it before the build, not at runtime. 
