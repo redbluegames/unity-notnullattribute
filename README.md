@@ -81,7 +81,7 @@ After installation you can enforce error reporting on null public fields on Mono
   public GameObject Another RequiredObject;
 ```
 
-Also provided is a flag called `IgnorePrefab` for ignoring the null check on prefabs. This is valuable when a prefab is used in multiple scenes and has a requirement in only one of those scenes. The null check will run for only the object you use in your scene. Note, you may want to consider a different solution entirely if you find yourself diverging the prefab's behavior significantly between each scene.
+Also provided is a flag called `IgnorePrefab` for ignoring the null check on prefabs. This is valuable when a prefab is used in multiple scenes and must link to an object that is stored in each of those scenes. The null check will run for only the object you use in your scene, not its corresponding prefab in the asset database.
 ```csharp
   [NotNull (IgnorePrefab = true)]
   public GameObject OnlyNeededInScene;
