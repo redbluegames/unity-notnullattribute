@@ -8,7 +8,14 @@ public class FindNotNullsOnLaunch {
 	static FindNotNullsOnLaunch ()
 	{
 		if(Debug.isDebugBuild) {
-			RedBlueTools.NotNullFinder.SearchForAndErrorForNotNullViolations ();
+			// Searching on first launch seemed to execute before references were wired up on scene objects.
+			EditorApplication.update += RunOnce;
 		}
+	}
+
+	static void RunOnce ()
+	{
+		EditorApplication.update -= RunOnce;
+		RedBlueTools.NotNullFinder.SearchForAndErrorForNotNullViolations ();
 	}
 }
