@@ -17,6 +17,9 @@ public class NotNullErrorTester : MonoBehaviour {
 	public GameObject NotNullInScenePrefab;
 	public GameObject WiredNotNullInScene;
 	public GameObject UnwiredNotNullInScene;
+	public GameObject UnwiredDerivedMB;
+	public GameObject WiredDerivedMB;
+	public GameObject WiredMultipleAttributesMB;
 
 	#endregion
 
@@ -45,6 +48,11 @@ public class NotNullErrorTester : MonoBehaviour {
 		TestAndAssertNumErroringFields (testName, NotNullInScenePrefab, 0);
 		TestAndAssertNumErroringFields (testName, WiredNotNullInScene, 0);
 		TestAndAssertNumErroringFields (testName, UnwiredNotNullInScene, 1);
+		
+		TestAndAssertNumErroringFields (testName, UnwiredDerivedMB, 2);
+		TestAndAssertNumErroringFields (testName, WiredDerivedMB, 0);
+
+		TestAndAssertNumErroringFields (testName, WiredMultipleAttributesMB, 0);
 
 		Debug.Log ("Test passed: " + testName);
 	}
