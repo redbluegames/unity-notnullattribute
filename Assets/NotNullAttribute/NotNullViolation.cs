@@ -34,7 +34,7 @@ namespace RedBlueTools
 
 		public override string ToString ()
 		{
-			return string.Format ("[NotNullViolation: Field{0}, FullName={1}]", FieldInfo.Name, FullName);
+			return string.Format ("[NotNullViolation: Field={0}, FullName={1}]", FieldInfo.Name, FullName);
 		}
 	}
 }

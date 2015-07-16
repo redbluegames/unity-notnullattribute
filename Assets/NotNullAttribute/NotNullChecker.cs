@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEditor;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
@@ -45,16 +46,28 @@ namespace RedBlueTools
 				}
 			}
 		
-			// Flag notNullAttributes that are allowed to be null as prefabs
-			foreach (NotNullViolation errorField in erroringFields) {
-				FieldInfo fieldInfo = errorField.FieldInfo;
-				foreach (Attribute attribute in Attribute.GetCustomAttributes (fieldInfo)) {
-					if (attribute.GetType () == typeof(NotNullAttribute)) {
-						NotNullAttribute notNullAttribute = (NotNullAttribute)attribute;
-						errorField.AllowNullAsPrefab = notNullAttribute.IgnorePrefab;
+			// Remove NotNullViolations for prefabs with IgnorePrefab
+			#if UNITY_EDITOR
+			bool isObjectAPrefab = PrefabUtility.GetPrefabType(sourceMB.gameObject) == PrefabType.Prefab;
+			List<NotNullViolation> violationsToIgnore = new List<NotNullViolation> ();
+			if (isObjectAPrefab) {
+				// Find all violations that should be overlooked.
+				foreach (NotNullViolation errorField in erroringFields) {
+					FieldInfo fieldInfo = errorField.FieldInfo;
+					foreach (Attribute attribute in Attribute.GetCustomAttributes (fieldInfo)) {
+						if (attribute.GetType () == typeof(NotNullAttribute)) {
+							if (((NotNullAttribute)attribute).IgnorePrefab) {
+								violationsToIgnore.Add (errorField);
+							}
+						}
 					}
 				}
+
+				foreach (NotNullViolation violation in violationsToIgnore) {
+					erroringFields.Remove (violation);
+				}
 			}
+			#endif
 		
 			return erroringFields;
 		}
