@@ -5,74 +5,46 @@ using RedBlueTools;
 
 public class NotNullErrorTester : MonoBehaviour {
 
-	#region Successes
-
-	public TraversalTests TraversalTestObjects;
-
-	[System.Serializable]
-	public class TraversalTests
-	{
-		public GameObject OneChild;
-		public GameObject OneDeepChild;
-		public GameObject OneInactiveChild;
-		public GameObject TwoChildren;
-		public GameObject ComplexHierarchy;
-	}
-
-	public GetNumErrorFieldsContainer GetNumErrorFields;
-	[System.Serializable]
-	public class GetNumErrorFieldsContainer
-	{
-		public GameObject Empty;
-		public GameObject MissingScript;
-		public GameObject NoneWired;
-		public GameObject SomeWired;
-		public GameObject AllWired;
-		public GameObject TwoMBsUnwired;
-		public GameObject TwoMBsWired;
-		public GameObject MultiUnwired;
-	}
+	#region Test Objects
+	public GameObject Empty;
+	public GameObject MissingScript;
+	public GameObject NoneWired;
+	public GameObject SomeWired;
+	public GameObject AllWired;
+	public GameObject TwoMBsUnwired;
+	public GameObject TwoMBsWired;
+	public GameObject MultiUnwired;
+	public GameObject NotNullInScenePrefab;
+	public GameObject WiredNotNullInScene;
+	public GameObject UnwiredNotNullInScene;
 
 	#endregion
 
 	[ContextMenu("Run Tests")]
 	void RunTests ()
 	{
-		TestObjectTraversal ();
 		TestFindErroringFields ();
 	}
 
 	#region Tests
-	void TestObjectTraversal ()
-	{
-		string testName = "GetNumErrorObjects";
-		// TODO: These are simply traversal tests. They should be moved.
-		/*
-		TestAndAssertNumErrorObjects (testName, GetNumErrorObjects.OneErrorInactiveChild, 1);
-		TestAndAssertNumErrorObjects (testName, GetNumErrorObjects.OneErrorInChild, 1);
-		TestAndAssertNumErrorObjects (testName, GetNumErrorObjects.OneErrorInDeepChild, 1);
-		TestAndAssertNumErrorObjects (testName, GetNumErrorObjects.ParentAndChildWithErrors, 2);
-		TestAndAssertNumErrorObjects (testName, GetNumErrorObjects.TwoErrorsInSiblings, 2);
-		TestAndAssertNumErrorObjects (testName, GetNumErrorObjects.ErrorsInComplexHierarchy, 3);
-		*/
-
-		Debug.Log ("Test passed: " + testName);
-	}
-	
 	void TestFindErroringFields ()
 	{
 		string testName = "GetsCorrectNumErrors";
 		
-		TestAndAssertNumErroringFields (testName, GetNumErrorFields.Empty, 0);
-		TestAndAssertNumErroringFields (testName, GetNumErrorFields.MissingScript, 0);
+		TestAndAssertNumErroringFields (testName, Empty, 0);
+		TestAndAssertNumErroringFields (testName, MissingScript, 0);
 		
-		TestAndAssertNumErroringFields (testName, GetNumErrorFields.NoneWired, 3);
-		TestAndAssertNumErroringFields (testName, GetNumErrorFields.SomeWired, 2);
-		TestAndAssertNumErroringFields (testName, GetNumErrorFields.AllWired, 0);
+		TestAndAssertNumErroringFields (testName, NoneWired, 3);
+		TestAndAssertNumErroringFields (testName, SomeWired, 2);
+		TestAndAssertNumErroringFields (testName, AllWired, 0);
 
-		TestAndAssertNumErroringFields (testName, GetNumErrorFields.TwoMBsUnwired, 2);
-		TestAndAssertNumErroringFields (testName, GetNumErrorFields.TwoMBsWired, 0);
-		TestAndAssertNumErroringFields (testName, GetNumErrorFields.MultiUnwired, 4);
+		TestAndAssertNumErroringFields (testName, TwoMBsUnwired, 2);
+		TestAndAssertNumErroringFields (testName, TwoMBsWired, 0);
+		TestAndAssertNumErroringFields (testName, MultiUnwired, 4);
+
+		TestAndAssertNumErroringFields (testName, NotNullInScenePrefab, 0);
+		TestAndAssertNumErroringFields (testName, WiredNotNullInScene, 0);
+		TestAndAssertNumErroringFields (testName, UnwiredNotNullInScene, 1);
 
 		Debug.Log ("Test passed: " + testName);
 	}
@@ -80,7 +52,7 @@ public class NotNullErrorTester : MonoBehaviour {
 	void TestAndAssertNumErroringFields (string testName, GameObject testObject, int expectedErrors)
 	{
 		string subTestName = testName + " | " + testObject.name;
-		List<NotNullViolation> errors = NotNullChecker.FindErroringFields (testObject, "In Test Scene");
+		List<NotNullViolation> errors = NotNullChecker.FindErroringFields (testObject);
 
 		int numFieldsWithErrors = errors.Count;
 		if (numFieldsWithErrors != expectedErrors) {

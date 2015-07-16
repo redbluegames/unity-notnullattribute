@@ -42,7 +42,7 @@ namespace RedBlueTools
 
 		static void ErrorForNullRequiredWiresOnGameObject (GameObject gameObject, string pathToAsset, bool checkPrefabs)
 		{
-			List<NotNullViolation> errorsOnGameObject = NotNullChecker.FindErroringFields (gameObject, pathToAsset);
+			List<NotNullViolation> errorsOnGameObject = NotNullChecker.FindErroringFields (gameObject);
 			foreach (NotNullViolation violation in errorsOnGameObject) {
 				if (checkPrefabs && violation.AllowNullAsPrefab) {
 					continue;

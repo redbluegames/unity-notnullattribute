@@ -8,8 +8,7 @@ namespace RedBlueTools
 {
 	public class NotNullChecker
 	{
-		
-		public static List<NotNullViolation> FindErroringFields (GameObject sourceObject, string assetPath)
+		public static List<NotNullViolation> FindErroringFields (GameObject sourceObject)
 		{
 			List<NotNullViolation> erroringFields = new List<NotNullViolation> ();
 			MonoBehaviour[] monobehaviours = sourceObject.GetComponents<MonoBehaviour> ();
