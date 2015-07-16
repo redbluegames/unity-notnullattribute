@@ -94,6 +94,9 @@ You can manually run a test of all null references using the _Not Null Finder_ m
 
 Also note that a check for null references will be made at launch as well.
 
+##Follow the Project
+Follow our progress and issues on our public Trello board: https://trello.com/b/zFQzi7Ep/notnullattribute
+
 ##FAQ
 
 * Why use this workflow instead of using `GameObject.Find ("ObjectName")` or `FindComponent<>` or some other way to link up cached objects as [Unity suggests](http://docs.unity3d.com/ScriptReference/GameObject.Find.html)?
