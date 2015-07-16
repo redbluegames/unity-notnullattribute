@@ -42,7 +42,7 @@ namespace RedBlueTools
 			foreach (FieldInfo notNullField in notNullFields) {
 				object fieldObject = notNullField.GetValue (sourceMB);
 				if (fieldObject == null || fieldObject.Equals (null)) {
-					erroringFields.Add (new NotNullViolation (notNullField, sourceMB, false));
+					erroringFields.Add (new NotNullViolation (notNullField, sourceMB));
 				}
 			}
 		

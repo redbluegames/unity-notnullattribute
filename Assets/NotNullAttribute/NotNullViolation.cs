@@ -10,15 +10,6 @@ namespace RedBlueTools
 		public FieldInfo FieldInfo;
 		public GameObject ErrorGameObject;
 		public MonoBehaviour SourceMonoBehaviour;
-		public bool AllowNullAsPrefab;
-		
-		public NotNullViolation (FieldInfo fieldInfo, MonoBehaviour sourceMB, bool allowNullAsPrefab = false)
-		{
-			this.FieldInfo = fieldInfo;
-			this.SourceMonoBehaviour = sourceMB;
-			this.ErrorGameObject = sourceMB.gameObject;
-			this.AllowNullAsPrefab = allowNullAsPrefab;
-		}
 		
 		public string FullName {
 			get {
@@ -30,6 +21,14 @@ namespace RedBlueTools
 				}
 				return fullName;
 			}
+		}
+
+		
+		public NotNullViolation (FieldInfo fieldInfo, MonoBehaviour sourceMB)
+		{
+			this.FieldInfo = fieldInfo;
+			this.SourceMonoBehaviour = sourceMB;
+			this.ErrorGameObject = sourceMB.gameObject;
 		}
 
 		public override string ToString ()
