@@ -42,6 +42,7 @@ namespace RedBlueTools
 
 		static void ErrorForNullRequiredWiresOnGameObject (GameObject gameObject, string pathToAsset, bool checkPrefabs)
 		{
+			return;
 			List<NotNullError> erroringObjects = new List<NotNullError> ();
 			NotNullError.TraverseGameObjectHierarchyForErrors (gameObject, pathToAsset, ref erroringObjects);
 			foreach (NotNullError errorObject in erroringObjects) {

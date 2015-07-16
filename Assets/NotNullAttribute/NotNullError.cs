@@ -10,7 +10,6 @@ namespace RedBlueTools
 		public GameObject ErrorGameObject;
 		public List<ErrorMonoBehaviour> MonoBehavioursWithErrors;
 		public string AssetPath;
-
 		public string FullName {
 			get {
 				Transform currentParent = ErrorGameObject.transform.parent;
@@ -92,7 +91,7 @@ namespace RedBlueTools
 		void OutputError (bool checkPrefabs)
 		{
 			foreach (ErrorMonoBehaviour errorMB in MonoBehavioursWithErrors) {
-				foreach (ErrorField error in errorMB.ErrorFields) {
+				foreach (NotNullViolation error in errorMB.ErrorFields) {
 					bool overlookError = checkPrefabs && error.AllowNullAsPrefab;
 					if (overlookError) {
 						continue;
@@ -109,7 +108,7 @@ namespace RedBlueTools
 	{
 		public MonoBehaviour SourceMonoBehaviour;
 		public bool IsMissing;
-		public List<ErrorField> ErrorFields;
+		public List<NotNullViolation> ErrorFields;
 		
 		public int NumErrorFields {
 			get {
@@ -131,21 +130,22 @@ namespace RedBlueTools
 			}
 		}
 		
-		static List<ErrorField> FindErroringFields (MonoBehaviour sourceMB)
+		static List<NotNullViolation> FindErroringFields (MonoBehaviour sourceMB)
 		{
-			List<ErrorField> erroringFields = new List<ErrorField> ();
+			List<NotNullViolation> erroringFields = new List<NotNullViolation> ();
 
 			// Add null NotNull fields
-			List<FieldInfo> notNullFields = ReflectionUtilities.GetMonoBehaviourFieldsWithAttribute<NotNullAttribute> (sourceMB);
+			List<FieldInfo> notNullFields = 
+				ReflectionUtilities.GetFieldsWithAttributeFromType<NotNullAttribute> (sourceMB.GetType ());
 			foreach (FieldInfo notNullField in notNullFields) {
 				object fieldObject = notNullField.GetValue (sourceMB);
 				if (fieldObject == null || fieldObject.Equals (null)) {
-					erroringFields.Add (new ErrorField (notNullField, sourceMB, false));
+					erroringFields.Add (new NotNullViolation (notNullField, sourceMB, false));
 				}
 			}
 
 			// Flag notNullAttributes that are allowed to be null as prefabs
-			foreach (ErrorField errorField in erroringFields) {
+			foreach (NotNullViolation errorField in erroringFields) {
 				FieldInfo fieldInfo = errorField.FieldInfo;
 				foreach (Attribute attribute in Attribute.GetCustomAttributes (fieldInfo)) {
 					if (attribute.GetType () == typeof(NotNullAttribute)) {
@@ -167,17 +167,31 @@ namespace RedBlueTools
 		}
 	}
 	
-	public class ErrorField
+	public class NotNullViolation
 	{
 		public FieldInfo FieldInfo;
+		public GameObject ErrorGameObject;
 		public MonoBehaviour SourceMonoBehaviour;
 		public bool AllowNullAsPrefab;
 		
-		public ErrorField (FieldInfo fieldInfo, MonoBehaviour sourceMB, bool allowNullAsPrefab = false)
+		public NotNullViolation (FieldInfo fieldInfo, MonoBehaviour sourceMB, bool allowNullAsPrefab = false)
 		{
 			this.FieldInfo = fieldInfo;
 			this.SourceMonoBehaviour = sourceMB;
+			this.ErrorGameObject = sourceMB.gameObject;
 			this.AllowNullAsPrefab = allowNullAsPrefab;
+		}
+		
+		public string FullName {
+			get {
+				Transform currentParent = ErrorGameObject.transform.parent;
+				string fullName = ErrorGameObject.name;
+				while (currentParent != null) {
+					fullName = currentParent.gameObject.name + "/" + fullName;
+					currentParent = currentParent.transform.parent;
+				}
+				return fullName;
+			}
 		}
 	}
 }
