@@ -42,17 +42,17 @@ namespace RedBlueTools
 
 		static void ErrorForNullRequiredWiresOnGameObject (GameObject gameObject, string pathToAsset, bool checkPrefabs)
 		{
-			return;
-			List<NotNullError> erroringObjects = new List<NotNullError> ();
-			NotNullError.TraverseGameObjectHierarchyForErrors (gameObject, pathToAsset, ref erroringObjects);
-			foreach (NotNullError errorObject in erroringObjects) {
-				if (checkPrefabs) {
-					errorObject.OutputErrorForPrefabs ();
-				}else {
-					errorObject.OutputErrorForSceneObjects ();
+			List<NotNullViolation> errorsOnGameObject = NotNullChecker.FindErroringFields (gameObject, pathToAsset);
+			foreach (NotNullViolation violation in errorsOnGameObject) {
+				if (checkPrefabs && violation.AllowNullAsPrefab) {
+					continue;
 				}
+				Debug.LogError (violation + "\nPath: " + pathToAsset, violation.ErrorGameObject);
 			}
-			return;
+
+			foreach (Transform child in gameObject.transform) {
+				ErrorForNullRequiredWiresOnGameObject (child.gameObject, pathToAsset, checkPrefabs);
+			}
 		}
 
 		static void Log (string log)

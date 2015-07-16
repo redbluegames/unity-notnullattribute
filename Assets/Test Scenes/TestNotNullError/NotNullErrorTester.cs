@@ -58,20 +58,6 @@ public class NotNullErrorTester : MonoBehaviour {
 
 		Debug.Log ("Test passed: " + testName);
 	}
-
-	void TestAndAssertNumErrorObjects (string testName, GameObject testObject, int expectedErrors)
-	{
-		string subTestName = testName + " | " + testObject.name;
-		List<NotNullError> errors = new List<NotNullError> ();
-		NotNullError.TraverseGameObjectHierarchyForErrors (testObject, "TestScene", ref errors);
-
-		if (errors.Count != expectedErrors) {
-			LogTestFailure (subTestName, string.Format("Expected {0} errors, found {1}", 
-			                                           expectedErrors,
-			                                           errors.Count));
-			return;
-		}
-	}
 	
 	void TestFindErroringFields ()
 	{
@@ -106,14 +92,6 @@ public class NotNullErrorTester : MonoBehaviour {
 	#endregion
 
 	#region Test Helpers
-
-	List<NotNullError> RunTestsOnObject (GameObject testObject)
-	{
-		List<NotNullError> errors = new List<NotNullError> ();
-		NotNullError.TraverseGameObjectHierarchyForErrors (testObject, "TestScene", ref errors);
-		return errors;
-	}
-
 	void LogTestFailure (string testName, string failureMessage)
 	{
 		Debug.LogError ("Test Failed: " + testName + "\n" + failureMessage);
