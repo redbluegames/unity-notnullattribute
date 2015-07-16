@@ -8,16 +8,15 @@ namespace RedBlueTools
 {
 	public static class ReflectionUtilities
 	{
-		public static List<FieldInfo> GetMonoBehaviourFieldsWithAttribute<T> (MonoBehaviour mb, 
+		public static List<FieldInfo> GetFieldsWithAttributeFromType<T> (Type classToInspect, 
 	                                                                      BindingFlags reflectionFlags = BindingFlags.Default)
 		{
 			List<FieldInfo> fieldsWithAttribute = new List<FieldInfo> ();
-			Type mbType = mb.GetType ();
 			FieldInfo[] allFields;
 			if (reflectionFlags == BindingFlags.Default) {
-				allFields = mbType.GetFields ();
+				allFields = classToInspect.GetFields ();
 			} else {
-				allFields = mbType.GetFields (reflectionFlags);
+				allFields = classToInspect.GetFields (reflectionFlags);
 			}
 			foreach (FieldInfo fieldInfo in allFields) {
 				foreach (Attribute attribute in Attribute.GetCustomAttributes (fieldInfo)) {

@@ -22,7 +22,7 @@ namespace RedBlueTools
 				Log ("Loading Asset for guid at path: " + pathToGameObject);
 				GameObject gameObject = (GameObject)AssetDatabase.LoadAssetAtPath (pathToGameObject, typeof(GameObject));
 
-				ErrorForNullRequiredWiresOnGameObject (gameObject, pathToGameObject, true);
+				ErrorForNullRequiredWiresOnGameObject (gameObject, pathToGameObject);
 			}
 
 			// Search the scene objects (only need root game objects since children will be searched)
@@ -34,24 +34,22 @@ namespace RedBlueTools
 				}
 			}
 			foreach (GameObject rootGameObjectInScene in rootSceneGameObjects) {
-				ErrorForNullRequiredWiresOnGameObject (rootGameObjectInScene, "In current scene.", false);
+				ErrorForNullRequiredWiresOnGameObject (rootGameObjectInScene, "In current scene.");
 			}
 
 			Debug.Log ("NotNull search complete");
 		}
 
-		static void ErrorForNullRequiredWiresOnGameObject (GameObject gameObject, string pathToAsset, bool checkPrefabs)
+		static void ErrorForNullRequiredWiresOnGameObject (GameObject gameObject, string pathToAsset)
 		{
-			List<NotNullError> erroringObjects = new List<NotNullError> ();
-			NotNullError.TraverseGameObjectHierarchyForErrors (gameObject, pathToAsset, ref erroringObjects);
-			foreach (NotNullError errorObject in erroringObjects) {
-				if (checkPrefabs) {
-					errorObject.OutputErrorForPrefabs ();
-				}else {
-					errorObject.OutputErrorForSceneObjects ();
-				}
+			List<NotNullViolation> errorsOnGameObject = NotNullChecker.FindErroringFields (gameObject);
+			foreach (NotNullViolation violation in errorsOnGameObject) {
+				Debug.LogError (violation + "\nPath: " + pathToAsset, violation.ErrorGameObject);
 			}
-			return;
+
+			foreach (Transform child in gameObject.transform) {
+				ErrorForNullRequiredWiresOnGameObject (child.gameObject, pathToAsset);
+			}
 		}
 
 		static void Log (string log)

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 using System.Reflection;
 using System.Collections;
@@ -14,7 +14,8 @@ namespace RedBlueTools
 		[ContextMenu("Run Tests")]
 		void RunTests ()
 		{
-			List<FieldInfo> fieldsWithAttribute = ReflectionUtilities.GetMonoBehaviourFieldsWithAttribute<SerializeField> (testBehaviour);
+			List<FieldInfo> fieldsWithAttribute = 
+				ReflectionUtilities.GetFieldsWithAttributeFromType<SerializeField> (testBehaviour.GetType ());
 			LogFieldInfoList (fieldsWithAttribute);
 		}
 
