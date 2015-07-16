@@ -4,8 +4,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using System;
+using RedBlue.Extensions;
 
-namespace RedBlueTools
+namespace RedBlue.NotNull
 {
 	public class NotNullChecker
 	{

@@ -4,13 +4,14 @@ using System;
 using System.Reflection;
 
 [System.AttributeUsage (System.AttributeTargets.Field)]
-public class NotNullAttribute : PropertyAttribute {
+public class NotNullAttribute : PropertyAttribute
+{
 
 	public bool IgnorePrefab = false;
 }
 
 #if UNITY_EDITOR
-namespace RedBlueTools
+namespace RedBlue.NotNull
 {
 	[CustomPropertyDrawer(typeof(NotNullAttribute))]
 	public class NotNullAttributeDrawer : PropertyDrawer

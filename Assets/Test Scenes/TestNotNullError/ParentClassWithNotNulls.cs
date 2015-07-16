@@ -1,10 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ParentClassWithNotNulls : MonoBehaviour
+namespace RedBlue.NotNull.Tests
 {
-	[Header ("Parent Fields")]
-	[NotNull]
-	public GameObject
-		ParentRequiredObject;
+	public class ParentClassWithNotNulls : MonoBehaviour
+	{
+		[Header ("Parent Fields")]
+		[NotNull]
+		public GameObject
+			ParentRequiredObject;
+	}
 }

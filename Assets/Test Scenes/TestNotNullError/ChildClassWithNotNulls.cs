@@ -1,10 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ChildClassWithNotNulls : ParentClassWithNotNulls
+namespace RedBlue.NotNull.Tests
 {
-	[Header ("Child Fields")]
-	[NotNull]
-	public GameObject
-		ChildRequiredObject;
+	public class ChildClassWithNotNulls : ParentClassWithNotNulls
+	{
+		[Header ("Child Fields")]
+		[NotNull]
+		public GameObject
+			ChildRequiredObject;
+	}
 }

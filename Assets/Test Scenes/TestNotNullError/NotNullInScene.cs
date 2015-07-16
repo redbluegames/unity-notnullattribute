@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-namespace RedBlueTools
+namespace RedBlue.NotNull.Tests
 {
 	public class NotNullInScene : MonoBehaviour
 	{

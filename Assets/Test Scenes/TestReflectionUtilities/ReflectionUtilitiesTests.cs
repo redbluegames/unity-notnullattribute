@@ -3,8 +3,9 @@ using System;
 using System.Reflection;
 using System.Collections;
 using System.Collections.Generic;
+using RedBlue.Extensions;
 
-namespace RedBlueTools
+namespace RedBlue.NotNull.Tests
 {
 	[ExecuteInEditMode]
 	public class ReflectionUtilitiesTests : MonoBehaviour

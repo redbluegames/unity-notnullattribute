@@ -4,7 +4,7 @@ using System.Reflection;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace RedBlueTools
+namespace RedBlue.Extensions
 {
 	public static class ReflectionUtilities
 	{

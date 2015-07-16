@@ -1,13 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class EmptyScript : MonoBehaviour {
-
-	public int PublicInt;
-	int privateInt;
-
-	public void DoNothing ()
+namespace RedBlue.NotNull.Tests
+{
+	public class EmptyScript : MonoBehaviour
 	{
-		return;
+
+		public int PublicInt;
+		int privateInt;
+
+		public void DoNothing ()
+		{
+			return;
+		}
 	}
 }

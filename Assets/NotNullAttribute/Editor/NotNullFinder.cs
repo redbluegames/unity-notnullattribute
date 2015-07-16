@@ -3,15 +3,16 @@ using UnityEditor;
 using System.Reflection;
 using System.Collections;
 using System.Collections.Generic;
+using RedBlue.NotNull;
 
-namespace RedBlueTools
+namespace RedBlue.EditorTools
 {
 	public class NotNullFinder : EditorWindow
 	{
 		static bool outputLogs = false;
 		
 		[MenuItem ("RedBlueTools/Not Null Finder")]
-		public static void  SearchForAndErrorForNotNullViolations ()
+		public static void SearchForAndErrorForNotNullViolations ()
 		{
 			Debug.Log ("Searching for null NotNull fields");
 			// Search for and error for prefabs with null RequireWire fields
