@@ -11,7 +11,7 @@ public class NotNullAttribute : PropertyAttribute
 }
 
 #if UNITY_EDITOR
-namespace RedBlue.NotNull
+namespace RedBlueGames.NotNull
 {
 	[CustomPropertyDrawer(typeof(NotNullAttribute))]
 	public class NotNullAttributeDrawer : PropertyDrawer

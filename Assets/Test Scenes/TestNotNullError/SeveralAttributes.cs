@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-namespace RedBlue.NotNull.Tests
+namespace RedBlueGames.NotNull.Tests
 {
 	public class SeveralAttributes : MonoBehaviour
 	{

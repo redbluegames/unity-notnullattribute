@@ -3,7 +3,7 @@ using UnityEditor;
 using System.Reflection;
 using System.Collections;
 using System.Collections.Generic;
-using RedBlue.NotNull;
+using RedBlueGames.NotNull;
 
 namespace RedBlue.EditorTools
 {

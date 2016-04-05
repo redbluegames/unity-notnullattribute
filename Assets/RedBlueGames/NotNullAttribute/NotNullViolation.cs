@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System;
 
-namespace RedBlue.NotNull
+namespace RedBlueGames.NotNull
 {
 	public class NotNullViolation
 	{

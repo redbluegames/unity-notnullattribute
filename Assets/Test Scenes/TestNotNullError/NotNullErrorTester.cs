@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace RedBlue.NotNull.Tests
+namespace RedBlueGames.NotNull.Tests
 {
 	public class NotNullErrorTester : MonoBehaviour
 	{

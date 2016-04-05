@@ -4,9 +4,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using System;
-using RedBlue.Extensions;
+using RedBlueGames.Tools;
 
-namespace RedBlue.NotNull
+namespace RedBlueGames.NotNull
 {
 	public class NotNullChecker
 	{
@@ -39,7 +39,7 @@ namespace RedBlue.NotNull
 		
 			// Add null NotNull fields
 			List<FieldInfo> notNullFields = 
-				ReflectionUtilities.GetFieldsWithAttributeFromType<NotNullAttribute> (sourceMB.GetType ());
+				ReflectionUtility.GetFieldsWithAttributeFromType<NotNullAttribute> (sourceMB.GetType ());
 			foreach (FieldInfo notNullField in notNullFields) {
 				object fieldObject = notNullField.GetValue (sourceMB);
 				if (fieldObject == null || fieldObject.Equals (null)) {
