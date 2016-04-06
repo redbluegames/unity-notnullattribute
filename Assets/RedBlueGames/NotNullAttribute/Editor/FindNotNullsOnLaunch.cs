@@ -16,6 +16,6 @@ public class FindNotNullsOnLaunch {
 	static void RunOnce ()
 	{
 		EditorApplication.update -= RunOnce;
-		RedBlue.EditorTools.NotNullFinder.SearchForAndErrorForNotNullViolations ();
+		RedBlueGames.NotNull.NotNullFinder.SearchForAndErrorForNotNullViolations ();
 	}
 }

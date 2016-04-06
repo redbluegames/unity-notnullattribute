@@ -5,7 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using RedBlueGames.NotNull;
 
-namespace RedBlue.EditorTools
+namespace RedBlueGames.NotNull
 {
 	public class NotNullFinder : EditorWindow
 	{
