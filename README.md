@@ -95,7 +95,7 @@ You can manually run a test of all null references using the _Not Null Finder_ m
 Also note that a check for null references will be made at launch as well.
 
 ##Follow the Project
-Follow our progress and issues on our public Trello board: https://trello.com/b/zFQzi7Ep/notnullattribute
+Follow our progress and issues on the [GitHub issues page](https://github.com/redbluegames/unity-notnullattribute/issues).
 
 ##FAQ
 
