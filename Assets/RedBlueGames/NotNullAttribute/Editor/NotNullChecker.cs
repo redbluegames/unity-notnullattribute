@@ -1,17 +1,17 @@
 ﻿namespace RedBlueGames.NotNull
 {
+    using RedBlueGames.Tools;
     using System;
     using System.Collections;
     using System.Collections.Generic;
     using System.Reflection;
-    using RedBlueGames.Tools;
     using UnityEditor;
     using UnityEngine;
 
     /// <summary>
     /// This class is responsible for checking objects for NotNull violations.
     /// </summary>
-    public class NotNullChecker
+    public static class NotNullChecker
     {
         /// <summary>
         /// Finds the erroring NotNull fields on a GameObject.
