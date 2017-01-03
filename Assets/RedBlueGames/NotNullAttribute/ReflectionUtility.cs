@@ -1,10 +1,8 @@
-﻿namespace RedBlueGames.Tools
+﻿namespace RedBlueGames.NotNull
 {
     using System;
-    using System.Collections;
     using System.Collections.Generic;
     using System.Reflection;
-    using UnityEngine;
 
     /// <summary>
     /// Utility methods to help with Reflection
@@ -20,7 +18,7 @@
         /// <param name="reflectionFlags">Reflection flags - supplying none uses default GetFields method.</param>
         /// <typeparam name="T">The Attribute type to search for.</typeparam>
         public static List<FieldInfo> GetFieldsWithAttributeFromType<T>(
-            Type classToInspect, 
+            Type classToInspect,
             BindingFlags reflectionFlags = BindingFlags.Default)
         {
             List<FieldInfo> fieldsWithAttribute = new List<FieldInfo>();

@@ -1,6 +1,5 @@
 ﻿namespace RedBlueGames.NotNull
 {
-    using RedBlueGames.Tools;
     using System;
     using System.Collections;
     using System.Collections.Generic;
@@ -11,7 +10,7 @@
     /// <summary>
     /// This class is responsible for checking objects for NotNull violations.
     /// </summary>
-    public static class NotNullChecker
+    public class NotNullChecker
     {
         /// <summary>
         /// Finds the erroring NotNull fields on a GameObject.

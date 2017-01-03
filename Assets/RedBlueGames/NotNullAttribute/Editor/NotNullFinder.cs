@@ -28,6 +28,13 @@
             {
                 Log("Loading GUID: " + guid);
                 string pathToGameObject = AssetDatabase.GUIDToAssetPath(guid);
+
+                // Skip test assets. This should be done using asset settings in the future.
+                if (pathToGameObject.Contains("RedBlueGames/NotNullAttribute/Tests"))
+                {
+                    continue;
+                }
+
                 Log("Loading Asset for guid at path: " + pathToGameObject);
                 GameObject gameObject = (GameObject)AssetDatabase.LoadAssetAtPath(pathToGameObject, typeof(GameObject));
 
