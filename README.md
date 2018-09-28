@@ -6,7 +6,7 @@ The NotNullAttribute is a custom attribute that is used to support workflows in 
 
 The package comes with a drawer that renders NotNull fields in the Inspector with errors when null, and with an "*" next to their label to help identify required fields. It also includes a tool to help find NotNull violations, which can be run at launch time or as part of a build.
 
-##Example Workflow
+## Example Workflow
 Our workflow for UI requires each root UI screen, such as Main Menu, to be its own prefab. This root prefab controls all of its children objects, including assigning OnClick events and text, etc. We assign the children directly to the root prefab object as public members, of say a UIMainMenu.cs script.
 
 Here is an example of the script without a NotNull attribute:
@@ -58,7 +58,7 @@ public class UI_MainMenu : MonoBehaviour
 }
 ```
 
-##Installation
+## Installation
 The easiest thing to do is to install the package from the .unitypackage file that's included in the repository.
 * In the root folder of this Github project, click the file called "NotNullAttributePackage.unitypackage".
 * Then click on View Raw to download the package.
@@ -68,9 +68,9 @@ The easiest thing to do is to install the package from the .unitypackage file th
 
 You can put the folder wherever you want, but the files under the Editor folder must remain in a folder called "Editor" in order to be compiled correctly.
 
-##How to Use
+## How to Use
 
-###Scripting
+### Scripting
 After installation you can enforce error reporting on null public fields on MonoBehaviors by using the attribute `[NotNull]` or `[NotNullAttribute]`.
 
 ```csharp
@@ -87,17 +87,17 @@ Also provided is a flag called `IgnorePrefab` for ignoring the null check on pre
   public GameObject OnlyNeededInScene;
 ```
 
-###Editor
+### Editor
 You can manually run a test of all null references using the _Not Null Finder_ menu tool.
 
 ![RedBlueTools Menu](http://i.imgur.com/czgVruI.png)
 
 Also note that a check for null references will be made at launch as well.
 
-##Follow the Project
+## Follow the Project
 Follow our progress and issues on the [GitHub issues page](https://github.com/redbluegames/unity-notnullattribute/issues).
 
-##FAQ
+## FAQ
 
 * Why use this workflow instead of using `GameObject.Find ("ObjectName")` or `FindComponent<>` or some other way to link up cached objects as [Unity suggests](http://docs.unity3d.com/ScriptReference/GameObject.Find.html)?
   * It's less brittle. If you link to the object through GameObject.Find (), changing the name of the object in the hierarchy or in the scene will silently break this reference. 
