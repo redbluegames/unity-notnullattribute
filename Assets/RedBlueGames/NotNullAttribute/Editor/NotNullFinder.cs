@@ -1,4 +1,4 @@
-﻿namespace RedBlueGames.NotNull
+namespace RedBlueGames.NotNull
 {
     using System.Collections;
     using System.Collections.Generic;
@@ -52,26 +52,39 @@
                 }
             }
 
+            var foundErrors = false;
+
             foreach (GameObject rootGameObjectInScene in rootSceneGameObjects)
             {
-                ErrorForNullRequiredWiresOnGameObject(rootGameObjectInScene, "In current scene.");
+                foundErrors = foundErrors || ErrorForNullRequiredWiresOnGameObject(rootGameObjectInScene, "In current scene.");
+            }
+            
+            if (foundErrors) {
+ #if UNITY_EDITOR
+                UnityEditor.EditorApplication.isPlaying = false;
+ #endif
             }
 
             // Debug.Log ("NotNull search complete");
         }
 
-        private static void ErrorForNullRequiredWiresOnGameObject(GameObject gameObject, string pathToAsset)
+        private static bool ErrorForNullRequiredWiresOnGameObject(GameObject gameObject, string pathToAsset)
         {
+            var foundErrors = false;
+
             List<NotNullViolation> errorsOnGameObject = NotNullChecker.FindErroringFields(gameObject);
             foreach (NotNullViolation violation in errorsOnGameObject)
             {
                 Debug.LogError(violation + "\nPath: " + pathToAsset, violation.ErrorGameObject);
+                foundErrors = true;
             }
 
             foreach (Transform child in gameObject.transform)
             {
-                ErrorForNullRequiredWiresOnGameObject(child.gameObject, pathToAsset);
+                foundErrors = foundErrors || ErrorForNullRequiredWiresOnGameObject(child.gameObject, pathToAsset);
             }
+
+            return foundErrors;
         }
 
         private static void Log(string log)
