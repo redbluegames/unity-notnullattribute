@@ -1,3 +1,8 @@
+# Not Supported
+This project is not currently supported by us. If you like it, I highly recommend buying [Odin Inspector](https://odininspector.com/). It has a [Required] attribute and validation suite that functions similarly (but better). I was hesitant to adopt Odin at first because I wanted to use Unity's native serializer, but you can use the Inspector without the serializer.
+
+If you'd like to continue to use this attribute, feel free to do so. Just be aware we will no longer be making contributions so you'll have to support it yourself.
+
 # Unity - NotNullAttribute
 
 The NotNullAttribute is a custom attribute that is used to support workflows in Unity that rely heavily on GameObject and MonoBehavior references. By applying the `[NotNull]` attribute to public Object fields on MonoBehaviours we can get alerted when a field is not properly wired up in the Editor. This allows our code to assume the field is not null.
